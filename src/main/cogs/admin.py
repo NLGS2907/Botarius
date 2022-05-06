@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class AdminCog(GeneralCog):
     """
-    Cog for admin commands.
+    Cog for admin commands with permissions.
     """
 
     @command(name="prefix",
