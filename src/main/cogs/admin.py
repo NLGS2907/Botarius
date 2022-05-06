@@ -38,7 +38,7 @@ class AdminCog(GeneralCog):
         properties["prefixes"][str(ctx.guild.id)] = new_prefix
         save_json(properties, PROPERTIES_PATH)
 
-        await ctx.channel.send(f"**[INFO]** The command prefix was changed from " +
+        await ctx.channel.send("**[INFO]** The command prefix was changed from " +
                                f"`{old_prefix}` to `{new_prefix}` succesfully.",
                                delete_after=30.0)
         self.bot.log.info(f"The prefix in '{ctx.guild.name}' was changed from " +
