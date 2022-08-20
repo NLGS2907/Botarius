@@ -1,0 +1,3 @@
+"""
+UPDATE Shortcut Functions Module.
+"""

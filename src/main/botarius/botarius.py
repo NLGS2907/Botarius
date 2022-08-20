@@ -10,7 +10,7 @@ from discord.ext.commands import Bot
 from discord.utils import utcnow
 
 from ..auxiliar import get_prefix
-from ..constants import BOT_ID, COGS_PATH
+from ..db.shortcuts import get_bot_id, get_cogs_path
 from ..files import files_list
 from ..logger import BotLogger
 
@@ -50,7 +50,7 @@ class Botarius(Bot):
 
     def __init__(self,
                  cmd_prefix: Callable=get_prefix,
-                 actividad=Game(name="!info"),
+                 actividad=Game(name="/info"),
                  **opciones) -> None:
         """
         Initializes an instance of 'Botarius'.
@@ -59,7 +59,7 @@ class Botarius(Bot):
         super().__init__(cmd_prefix,
                          activity=actividad,
                          intents=Botarius.botarius_intents(),
-                         application_id=BOT_ID,
+                         application_id=get_bot_id(),
                          options=opciones)
 
         self.awaken_at: "datetime" = utcnow()
@@ -73,7 +73,7 @@ class Botarius(Bot):
 
         ext = "py"
 
-        for cog_name in files_list(COGS_PATH, ext=ext):
+        for cog_name in files_list(get_cogs_path(), ext=ext):
             if cog_name == "__init__.py":
                 continue
 

@@ -47,14 +47,20 @@ Bot Invite link: https://discord.com/api/oauth2/authorize?client_id=971819308810
 Repository: https://github.com/NLGS2907/Botarius
 """
 
-from .constants import BOT_TOKEN
+from os import getenv
+
+from dotenv import load_dotenv
+
+from .auxiliar import bot_args_parser
 from .botarius import Botarius
 
+load_dotenv()
 
-def main() -> int:
+def main(*_args, **_kwargs) -> int:
     "Main Function."
 
-    Botarius().run(BOT_TOKEN)
+    bot_args_parser().parse_args()
+    Botarius().run(getenv("DISCORD_TOKEN"))
     return 0
 
 

@@ -6,7 +6,7 @@ from logging import INFO, FileHandler, Formatter, StreamHandler, getLogger
 from typing import TYPE_CHECKING
 
 from ..auxiliar import Singleton
-from ..constants import LOG_PATH
+from ..db.shortcuts import get_log_path
 
 if TYPE_CHECKING:
 
@@ -48,7 +48,7 @@ class BotLogger(metaclass=Singleton):
 
         self._formatter = Formatter(fmt=self.format, datefmt=self.fmt_date)
 
-        self.file_handler = FileHandler(filename=LOG_PATH, encoding="utf-8")
+        self.file_handler = FileHandler(filename=get_log_path(), encoding="utf-8")
         self.stream_handler = StreamHandler()
         self.update_formatter()
 

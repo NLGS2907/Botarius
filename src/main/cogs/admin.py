@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 
 from discord.ext.commands import Context, command, is_owner
 
-from ..constants import LOG_PATH, PROPERTIES_PATH
-from ..files import load_json, save_json
+from ..db import update_records_of_table
+from ..db.shortcuts import get_log_path
 from .general import GeneralCog
 
 if TYPE_CHECKING:
@@ -34,9 +34,10 @@ class AdminCog(GeneralCog):
 
         old_prefix = ctx.prefix
 
-        properties = load_json(PROPERTIES_PATH)
-        properties["prefixes"][str(ctx.guild.id)] = new_prefix
-        save_json(properties, PROPERTIES_PATH)
+        update_records_of_table("guild_prefixes",
+                                set_values=(f"prefix={new_prefix!r}",),
+                                guild_id=ctx.guild.id,
+                                guild_name=ctx.guild.name)
 
         await ctx.channel.send("**[INFO]** The command prefix was changed from " +
                                f"`{old_prefix}` to `{new_prefix}` succesfully.",
@@ -95,9 +96,11 @@ class AdminCog(GeneralCog):
         Empties the log file contents.
         """
 
-        with open(LOG_PATH, mode='w', encoding="utf-8"):
+        log_path = get_log_path()
 
-            await ctx.channel.send(f"**[INFO]** Emptying log file in `./{LOG_PATH}`...",
+        with open(log_path, mode='w', encoding="utf-8"):
+
+            await ctx.channel.send(f"**[INFO]** Emptying log file in `{log_path}`...",
                                    delete_after=10.0)
 
 

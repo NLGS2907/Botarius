@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 from discord import Guild
 from discord.ext.commands import Cog, Context
 
-from ..constants import DEFAULT_PREFIX, PROPERTIES_PATH
-from ..files import load_json, save_json
+from ..db import fetch_records_from_table, insert_records_into_table
+from ..db.shortcuts import register_guild, get_default_prefix
 from .general import GeneralCog
 
 if TYPE_CHECKING:
@@ -55,11 +55,11 @@ class EventsCog(GeneralCog):
         """
 
         self.bot.log.info(f"Botarius has connected to guild '{guild.name}'.")
+        exists_in_db = fetch_records_from_table("guild_prefixes",
+                                                guild_id=guild.id)
 
-        properties = load_json(PROPERTIES_PATH)
-        properties["prefixes"][str(guild.id)] = DEFAULT_PREFIX
-        save_json(properties, PROPERTIES_PATH)
-
+        if not exists_in_db:
+            register_guild(guild.id, guild.name)
 
 
 async def setup(bot: "Botarius"):
